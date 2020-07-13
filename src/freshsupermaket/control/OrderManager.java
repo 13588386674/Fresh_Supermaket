@@ -545,18 +545,24 @@ public class OrderManager {
     public  void ReduceFromCart(int good_id,String customer_id,int quantity) throws DbException {
         //从购物车中减少商品
         int order_id=0;
+        double price=0;
+        double MemberPrice=0;
+        int flag=0;
+        int flag1=0;
         Connection conn=null;
         try {
             conn= DButil.getConnection();
             conn.setAutoCommit(false);
             //查看此时的order_id
-            String sql="select a.order_id,quantity from orders a,orderdetail b where a.order_id=b.order_id" +
+            String sql="select a.order_id,quantity,price from orders a,orderdetail b where a.order_id=b.order_id" +
                     " and good_id=? and customer_id like ? and  order_state like '未支付'";
             PreparedStatement pst=conn.prepareStatement(sql);
             pst.setInt(1,Integer.valueOf(good_id));
             pst.setString(2,customer_id);
             java.sql.ResultSet rs= pst.executeQuery();
+
             if(rs.next()){
+                int NowQuantity=rs.getInt(2)-quantity;//当前购物车中的该商品数量
                 sql="update orderdetail set quantity=quantity-? where order_id=? and good_id=?";
                 pst=conn.prepareStatement(sql);
                 pst.setInt(1,quantity);
@@ -564,6 +570,58 @@ public class OrderManager {
                 pst.setInt(2,order_id);
                 pst.setInt(3,good_id);
                 pst.execute();
+                double NowPrice=rs.getDouble(3);
+                sql="select price,end_date,quantity from timepromotion where good_id=? ";
+                pst=conn.prepareStatement(sql);
+                pst.setInt(1,Integer.valueOf(good_id));
+                rs=pst.executeQuery();
+                //判断该商品是否参与满折促销
+                double TimePromotionPrice=0;
+                if(rs.next()){
+                    if(rs.getTimestamp(2).getTime()>=System.currentTimeMillis()&&rs.getInt(3)>=NowQuantity){
+                        //能够参与限时促销,且数量足够,促销时间未过
+                        TimePromotionPrice=rs.getDouble(1);
+                        sql="select price,member_price from good where good_id=?";
+                        pst=conn.prepareStatement(sql);
+                        pst.setInt(1,Integer.valueOf(good_id));
+                        rs=pst.executeQuery();
+                        rs.next();
+                        price=rs.getDouble(1);
+                        MemberPrice=rs.getDouble(2);
+                        //判断此时的顾客是否为会员
+                        sql="select  member,member_finish_date from customer where customer_id like ?";
+                        pst=conn.prepareStatement(sql);
+                        pst.setString(1,customer_id);
+                        rs=pst.executeQuery();
+                        if(rs.next()){
+                            if(rs.getBoolean(1)){
+                                if(rs.getTimestamp(2).getTime()>=System.currentTimeMillis()){
+                                    //是会员，且会员日期未到期
+                                    flag1=1;
+                                }
+                            }
+                        }
+                    }
+                    if (flag==1){
+                        if(TimePromotionPrice<MemberPrice){
+                            //促销价低于会员价
+                            sql="update orderdetail set price=? where good_id=? and order_id=?";
+                            pst=conn.prepareStatement(sql);
+                            pst.setDouble(1,TimePromotionPrice);
+                            pst.setInt(2,good_id);
+                            pst.setInt(3,order_id);
+                            pst.execute();
+                        }
+                    }
+                }
+                //如果价格等于促销价格，促销量增加
+                if(NowPrice==TimePromotionPrice){
+                    sql="update timepromotion set quantity=quantity+? where good_id=?";
+                    pst=conn.prepareStatement(sql);
+                    pst.setInt(1,quantity);
+                    pst.setInt(2,good_id);
+                    pst.execute();
+                }
                 //在good表中增加商品数量
                 sql="update good  set quantity=quantity+? where good_id=?";
                 pst=conn.prepareStatement(sql);

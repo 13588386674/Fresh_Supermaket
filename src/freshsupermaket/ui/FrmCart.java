@@ -145,7 +145,7 @@ public class FrmCart  extends JDialog implements ActionListener{
                 return;
             }
             BuyCart good=this.pubs.get(i);
-            if (isNumeric.isNumeric(this.edtQuantity.getText())){
+            if (isNumeric.isNumeric(this.edtQuantity.getText())&&this.edtQuantity.getText()!=null&&!"".equals(this.edtQuantity.getText())){
                 if (Integer.valueOf(this.edtQuantity.getText())<=good.getQuantity()){
                     String name=(new CustomerManager().currentLoginCustomer.getCustomer_id());
                     try {
