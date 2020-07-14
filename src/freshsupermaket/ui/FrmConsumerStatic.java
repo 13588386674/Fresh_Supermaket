@@ -6,6 +6,7 @@ import freshsupermaket.control.CustomerManager;
 import freshsupermaket.control.OrderManager;
 import freshsupermaket.model.BeanCoupon;
 import freshsupermaket.model.BeanOrder;
+import freshsupermaket.model.BeanStatic;
 import freshsupermaket.model.BuyCart;
 import freshsupermaket.util.BaseException;
 
@@ -27,7 +28,7 @@ public class FrmConsumerStatic extends JDialog implements ActionListener {
     private JLabel labelSumReduction =new JLabel();
     private Object tblData[][];
     List<BeanOrder> pubs=null;
-    BeanOrder order=new BeanOrder();
+    BeanStatic order=new BeanStatic();
     double SumOrder=0;
     double SumMoney=0;
     double SumReduction=0;
@@ -38,9 +39,9 @@ public class FrmConsumerStatic extends JDialog implements ActionListener {
             pubs =(new OrderManager()).LoadCustomerOrder();
             //order表中的orderstate,content,star分别用于临时存放总单数，总消费金额，总优惠金额
             order=(new OrderManager()).StaticReductionMoney();
-            this.labelSumOrder.setText("总消费单数："+order.getOrder_state());
-            if(order.getContent()!=null){
-                Double d = Double.parseDouble(order.getContent());
+            this.labelSumOrder.setText("总消费单数："+order.getSumOrder());
+            if(order.getSumMoney()!=null){
+                Double d = Double.parseDouble(order.getSumMoney());
                 DecimalFormat df = new DecimalFormat("0.00");
                 String s = df.format(d);
                 this.labelSumMoney.setText("总消费金额："+s);
@@ -48,8 +49,8 @@ public class FrmConsumerStatic extends JDialog implements ActionListener {
             else {
                 this.labelSumMoney.setText("总消费金额："+"0.00");
             }
-            if(order.getStar()!=null){
-                Double d = Double.parseDouble(order.getStar());
+            if(order.getSumReduction()!=null){
+                Double d = Double.parseDouble(order.getSumReduction());
                 DecimalFormat df = new DecimalFormat("0.00");
                 String s = df.format(d);
                 this.labelSumReduction.setText("总优惠："+s);

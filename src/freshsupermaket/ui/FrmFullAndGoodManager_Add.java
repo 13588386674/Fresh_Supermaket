@@ -101,7 +101,11 @@ public class FrmFullAndGoodManager_Add extends JDialog implements ActionListener
                     JOptionPane.showMessageDialog(null,"不存在此商品或满折","错误",JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                (new DiscountManager()).CreateFullAndGood(pub);
+                if((new DiscountManager()).CreateFullAndGood(pub)==false){
+                    JOptionPane.showMessageDialog(null,"不能创建相同商品满折信息","错误",JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 this.setVisible(false);
             } catch (BaseException e1) {
                 JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);

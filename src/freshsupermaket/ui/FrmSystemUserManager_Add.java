@@ -1,5 +1,6 @@
 package freshsupermaket.ui;
 
+import freshsupermaket.control.CheckForeign;
 import freshsupermaket.control.SystemUserManager;
 import freshsupermaket.model.BeanSystemUser;
 import freshsupermaket.util.BaseException;
@@ -64,6 +65,10 @@ public class FrmSystemUserManager_Add extends JDialog implements ActionListener 
             user.setPassword(userpwd);
 
             try {
+                if((new CheckForeign()).CheckSystemUser(user.getSystem_user_id())==false){
+                    JOptionPane.showMessageDialog(null,"存在管理员","错误",JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 (new SystemUserManager()).CreateSystemUser(user);
                 this.setVisible(false);
             } catch (BaseException e1) {

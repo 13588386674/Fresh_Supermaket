@@ -1,5 +1,6 @@
 package freshsupermaket.control;
 
+import freshsupermaket.util.BaseException;
 import freshsupermaket.util.DButil;
 import freshsupermaket.util.DbException;
 
@@ -373,6 +374,32 @@ public class CheckForeign {
         }
         return true;
     }
+    public boolean CheckSystemUser(String id) throws BaseException{
+        Connection conn=null;
+        try {
+            conn=DButil.getConnection();
+            String sql="select * from systemuser where system_user_id like ?";
+            java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+            pst.setString(1,id);
+            java.sql.ResultSet rs=pst.executeQuery();
+            if(rs.next()){
+                return false;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new DbException(e);
+        }
+        finally {
+            if(conn!=null)
+                try{
+                    conn.close();
+                }catch(SQLException e){
+                    e.printStackTrace();
+                }
+        }
+        return true;
+    }
+
     public Boolean CheckGoodPurchaseForeign(int goodId) throws DbException {
         //检查商品ID是否存在，用于商品购买步骤
         Connection conn=null;

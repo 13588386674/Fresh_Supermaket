@@ -3,6 +3,7 @@ package freshsupermaket.ui;
 import com.sun.org.apache.xpath.internal.operations.Or;
 import freshsupermaket.control.GoodInformationManager;
 import freshsupermaket.control.OrderManager;
+import freshsupermaket.control.isNumeric;
 import freshsupermaket.model.BeanGood;
 import freshsupermaket.model.BeanGoodType;
 import freshsupermaket.model.BeanOrder;
@@ -71,7 +72,20 @@ public class FrmOrderEvaluate extends JDialog implements ActionListener {
             BeanOrder o=new BeanOrder();
             o.setOrder_id(this.good.getOrder_id());
             o.setContent(this.edtContent.getText());
-            o.setStar(this.edtStar.getText());
+            if(isNumeric.isNumeric(this.edtStar.getText())){
+                if(Integer.valueOf(this.edtStar.getText())>=1&&Integer.valueOf(this.edtStar.getText())<=5){
+                    Integer.valueOf(this.edtStar.getText());
+                }
+                else {
+                    JOptionPane.showMessageDialog(null,"星级为1-5的数字","错误",JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+            else{
+                JOptionPane.showMessageDialog(null,"星级为1-5的数字","错误",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             try {
                 (new OrderManager()).Evaluate(o);
             }catch (BaseException e1) {

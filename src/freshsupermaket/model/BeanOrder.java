@@ -23,7 +23,7 @@ public class BeanOrder {
     private String order_state;//订单状态
     private String content;//描述
     private Date evaluate_date;//评价日期
-    private String star;//星级
+    private int star;//星级
 
     public String getContent() {
         return content;
@@ -41,11 +41,11 @@ public class BeanOrder {
         this.evaluate_date = evaluate_date;
     }
 
-    public String getStar() {
+    public int getStar() {
         return star;
     }
 
-    public void setStar(String star) {
+    public void setStar(int star) {
         this.star = star;
     }
 

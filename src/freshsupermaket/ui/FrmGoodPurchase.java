@@ -140,10 +140,6 @@ public class FrmGoodPurchase extends JDialog implements ActionListener {
                 if (Integer.valueOf(this.edtAdd.getText())<good.getQuantity()){
                     String name=(new CustomerManager().currentLoginCustomer.getCustomer_id());
                     try {
-                        if(!(new CheckForeign()).CheckGoodPurchaseForeign(good.getGood_id())){
-                            JOptionPane.showMessageDialog(null,"不存在此商品","错误",JOptionPane.ERROR_MESSAGE);
-                            return;
-                        }
                         (new OrderManager()).AddGoodToCart(good.getGood_id(),name,count++,Integer.valueOf(this.edtAdd.getText()));
                     }catch (BaseException e1){
                         JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);

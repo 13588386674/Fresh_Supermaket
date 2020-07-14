@@ -79,17 +79,24 @@ public class DiscountManager {
         }
     }
 
-    public void CreateFullAndGood(BeanFullAndGood c)throws BaseException{
+    public boolean CreateFullAndGood(BeanFullAndGood c)throws BaseException{
         //创建商品满减信息
         Connection conn=null;
         try {
 
             conn=DButil.getConnection();
             conn.setAutoCommit(false);
-
-            String sql="insert into fullandgood(good_id,full_reduction_id,start_date,end_date) " +
-                    "values(?,?,?,?)";
+            String sql="select * from fullandgood where good_id=? and full_reduction_id=?";
             java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+            pst.setInt(1,c.getGood_id());
+            pst.setInt(2,c.getFull_reduction_id());
+            java.sql.ResultSet rs=pst.executeQuery();
+            if(rs.next()){
+                return false;
+            }
+            sql="insert into fullandgood(good_id,full_reduction_id,start_date,end_date) " +
+                    "values(?,?,?,?)";
+            pst=conn.prepareStatement(sql);
             pst.setInt(1,c.getGood_id());
             pst.setInt(2,c.getFull_reduction_id());
             pst.setTimestamp(3,new java.sql.Timestamp(c.getStart_date().getTime()));
@@ -109,7 +116,7 @@ public class DiscountManager {
                     e.printStackTrace();
                 }
         }
-
+        return  true;
     }
 
     public void CreateTimePromotion(BeanTimePromotion c)throws BaseException{

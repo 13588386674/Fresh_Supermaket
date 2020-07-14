@@ -56,6 +56,18 @@ public class FrmCart  extends JDialog implements ActionListener{
             tablmod.setDataVector(tblData,tblTitle);
             this.GoodTable.validate();
             this.GoodTable.repaint();
+            //显示当前金额
+            Total=(new OrderManager()).SearchTotal();
+            this.labelTotal.setText("商品金额:"+Total);
+            finallyTotalMoney=(new  OrderManager()).SearchFinallyTotal();
+            reductionMoney=Total-finallyTotalMoney;
+            DecimalFormat df = new DecimalFormat("0.00");
+            String s1 = df.format(reductionMoney);
+            BeanCoupon c=(new OrderManager()).SearchCoupon(finallyTotalMoney);
+            this.reduction.setText("减免金额"+s1+"优惠金额:"+c.getCredit_amount());
+            this.finallyTotal.setText("最终金额："+(finallyTotalMoney-c.getCredit_amount()));
+            FinallyMoneyAfterReduction=finallyTotalMoney-c.getCredit_amount();
+            (new OrderManager()).ModifyOrderSettlement(FinallyMoneyAfterReduction);
         } catch (BaseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -82,24 +94,6 @@ public class FrmCart  extends JDialog implements ActionListener{
         this.getContentPane().add(toolBar, BorderLayout.NORTH);
         //提取现有数据
         this.reloadTable();
-        try {
-            Total=(new OrderManager()).SearchTotal();
-            this.labelTotal.setText("商品金额:"+Total);
-            finallyTotalMoney=(new  OrderManager()).SearchFinallyTotal();
-            reductionMoney=Total-finallyTotalMoney;
-            DecimalFormat df = new DecimalFormat("0.00");
-            String s1 = df.format(reductionMoney);
-            BeanCoupon c=(new OrderManager()).SearchCoupon(finallyTotalMoney);
-            this.reduction.setText("减免金额"+s1+"优惠金额:"+c.getCredit_amount());
-            this.finallyTotal.setText("最终金额："+(finallyTotalMoney-c.getCredit_amount()));
-//            this.finallyTotal.setText("最终金额"+finallyTotalMoney);
-            //记录使用优惠券后的金额，如果之后点击支付和地址，则把该金额更新到order表中
-            FinallyMoneyAfterReduction=finallyTotalMoney-c.getCredit_amount();
-            (new OrderManager()).ModifyOrderSettlement(FinallyMoneyAfterReduction);
-        }catch (BaseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
 
         this.getContentPane().add(new JScrollPane(this.GoodTable), BorderLayout.CENTER);
 

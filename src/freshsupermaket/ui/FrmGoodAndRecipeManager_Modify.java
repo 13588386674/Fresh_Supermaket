@@ -87,7 +87,6 @@ public class FrmGoodAndRecipeManager_Modify extends JDialog implements ActionLis
                 return;
             }
             try {
-
                 (new GoodInformationManager()).ModifyGoodAndRecipe(pub,pub1);
                 this.setVisible(false);
             } catch (BaseException e1) {

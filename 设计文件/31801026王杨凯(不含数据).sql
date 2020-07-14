@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/7/12 17:41:01                           */
+/* Created on:     2020/7/14 8:43:51                            */
 /*==============================================================*/
 
 
@@ -183,7 +183,7 @@ create table Orders
    order_state          varchar(30),
    content              varchar(200),
    evaluate_date        timestamp,
-   star                 varchar(10),
+   star                 int,
    primary key (order_id)
 );
 

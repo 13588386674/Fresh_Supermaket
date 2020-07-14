@@ -2,6 +2,7 @@ package freshsupermaket.ui;
 
 import freshsupermaket.control.CheckForeign;
 import freshsupermaket.control.DiscountManager;
+import freshsupermaket.control.GoodInformationManager;
 import freshsupermaket.control.isNumeric;
 import freshsupermaket.model.BeanTimePromotion;
 import freshsupermaket.util.BaseException;
@@ -127,8 +128,12 @@ public class FrmTimePromotionManager_Modify extends JDialog implements ActionLis
 
 
             try {
-                if(!(new CheckForeign()).CheckTimePromotionForeign(pub.getGood_id())){
+                if((new CheckForeign()).CheckTimePromotionForeign(pub.getGood_id())==false){
                     JOptionPane.showMessageDialog(null,"该商品不存在","错误",JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if(new GoodInformationManager().SearchGood(pub.getGood_id())==false){
+                    JOptionPane.showMessageDialog(null,"一件商品只能参与一种促销","错误",JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 (new DiscountManager()).ModifyTimePromotion(pub);

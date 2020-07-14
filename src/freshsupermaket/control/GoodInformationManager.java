@@ -75,7 +75,31 @@ public class GoodInformationManager {
                 }
         }
     }
-
+    public boolean SearchGood(int id) throws BaseException{
+        Connection conn=null;
+        try {
+            conn=DButil.getConnection();
+            String sql="select * from timepromotion where good_id=?";
+            java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+            pst.setInt(1,id);
+            java.sql.ResultSet rs=pst.executeQuery();
+            if(rs.next()){
+                return false;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new DbException(e);
+        }
+        finally {
+            if(conn!=null)
+                try{
+                    conn.close();
+                }catch(SQLException e){
+                    e.printStackTrace();
+                }
+        }
+        return true;
+    }
     public void CreateRecipe(BeanRecipe r) throws  BaseException{
         //创建菜谱
         Connection conn=null;
@@ -107,15 +131,23 @@ public class GoodInformationManager {
         }
     }
 
-    public void CreateGoodAndRecipe(BeanGoodAndRecipe gap)throws BaseException{
+    public boolean CreateGoodAndRecipe(BeanGoodAndRecipe gap)throws BaseException{
         //创建商品菜谱表
         Connection conn=null;
         try {
             conn=DButil.getConnection();
             conn.setAutoCommit(false);
-            String sql="insert into goodandrecipe(good_id,recipe_id,content)" +
-                    "values(?,?,?)";
+            String sql="select * from goodandrecipe where good_id=? and recipe_id=?";
             java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+            pst.setInt(1,gap.getGood_id());
+            pst.setInt(2,gap.getRecipe_id());
+            java.sql.ResultSet rs=pst.executeQuery();
+            if(rs.next()){
+                return false;
+            }
+            sql="insert into goodandrecipe(good_id,recipe_id,content)" +
+                    "values(?,?,?)";
+            pst=conn.prepareStatement(sql);
             pst.setInt(1,gap.getGood_id());
             pst.setInt(2,gap.getRecipe_id());
             pst.setString(3,gap.getContent());
@@ -135,6 +167,7 @@ public class GoodInformationManager {
                     e.printStackTrace();
                 }
         }
+        return  true;
     }
 
     public void DeleteGoodType(int goodtype_id) throws BaseException{

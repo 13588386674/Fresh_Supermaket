@@ -84,7 +84,10 @@ public class FrmGoodAndRecipeManager_Add extends JDialog implements ActionListen
                     JOptionPane.showMessageDialog(null,"不存在此商品或菜谱","错误",JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                (new GoodInformationManager()).CreateGoodAndRecipe(pub);
+                if(new GoodInformationManager().CreateGoodAndRecipe(pub)==false){
+                    JOptionPane.showMessageDialog(null,"不能创建相同的商品菜谱关联","错误",JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 this.setVisible(false);
             } catch (BaseException e1) {
                 this.pub=null;
