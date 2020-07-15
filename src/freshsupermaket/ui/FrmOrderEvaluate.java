@@ -1,14 +1,9 @@
 package freshsupermaket.ui;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
-import freshsupermaket.control.GoodInformationManager;
 import freshsupermaket.control.OrderManager;
 import freshsupermaket.control.isNumeric;
-import freshsupermaket.model.BeanGood;
-import freshsupermaket.model.BeanGoodType;
 import freshsupermaket.model.BeanOrder;
 import freshsupermaket.util.BaseException;
-import org.hibernate.criterion.Order;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Map;
 
 public class FrmOrderEvaluate extends JDialog implements ActionListener {
     private BeanOrder good = null;

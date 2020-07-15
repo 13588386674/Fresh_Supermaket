@@ -5,7 +5,7 @@ import freshsupermaket.control.CustomerManager;
 import freshsupermaket.control.OrderManager;
 import freshsupermaket.model.BeanAddress;
 import freshsupermaket.util.BaseException;
-import org.hibernate.annotations.Check;
+
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

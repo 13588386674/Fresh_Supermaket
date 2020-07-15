@@ -76,6 +76,7 @@ public class GoodInformationManager {
         }
     }
     public boolean SearchGood(int id) throws BaseException{
+        //查找商品是否存在
         Connection conn=null;
         try {
             conn=DButil.getConnection();

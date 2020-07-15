@@ -5,7 +5,7 @@ import freshsupermaket.util.BaseException;
 import freshsupermaket.util.BusinessException;
 import freshsupermaket.util.DButil;
 import freshsupermaket.util.DbException;
-import javassist.compiler.ast.Keyword;
+
 import sun.reflect.generics.tree.VoidDescriptor;
 
 import javax.smartcardio.CommandAPDU;

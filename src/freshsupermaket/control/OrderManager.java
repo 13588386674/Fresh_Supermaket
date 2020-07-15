@@ -4,9 +4,6 @@ import freshsupermaket.model.*;
 import freshsupermaket.util.BaseException;
 import freshsupermaket.util.DButil;
 import freshsupermaket.util.DbException;
-import org.hibernate.criterion.Order;
-import org.hibernate.engine.jdbc.env.spi.AnsiSqlKeywords;
-import org.jboss.jandex.ThrowsTypeTarget;
 
 import javax.lang.model.element.NestingKind;
 import javax.swing.*;
@@ -893,7 +890,7 @@ public class OrderManager {
         }
     }
     public String searchOrderState(BeanOrder o) throws BaseException {
-
+        //用于只有先确认收货才能评价
         Connection conn=null;
         try {
             conn=DButil.getConnection();

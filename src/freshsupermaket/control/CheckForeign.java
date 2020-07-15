@@ -375,6 +375,7 @@ public class CheckForeign {
         return true;
     }
     public boolean CheckSystemUser(String id) throws BaseException{
+        //用于添加用户时判断用户是否存在
         Connection conn=null;
         try {
             conn=DButil.getConnection();
